@@ -14,5 +14,5 @@ jobs:
     - name: Get the output time
       run: echo "The time was ${{ steps.hello.outputs.time }}"
     - name: Display status
-      run: echo "Show the status: ${{ steps.hello.outputs.status }}"
+      run: echo "Show the status ${{ steps.hello.outputs.status }}"
 
