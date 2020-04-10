@@ -24,3 +24,8 @@ jobs:
         body: |
           Result:
            ${{ steps.log.outputs.result }}
+
+    - name: Exit on failure
+      if: steps.test.outputs.status == 'failure'
+      run: exit 1
+
