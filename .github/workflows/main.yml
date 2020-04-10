@@ -1,18 +1,19 @@
-on: [push]
-
+on: push
+name: Test File
 jobs:
-  hello_world_job:
+  remark:
     runs-on: ubuntu-latest
-    name: A job to say hello
     steps:
-    - name: Hello world action step
-      id: hello
-      uses: actions/hello-world-docker-action@v1
-      with:
-        who-to-greet: 'Mona the Octocat'
-    # Use the output from the `hello` step
-    - name: Get the output time
-      run: echo "The time was ${{ steps.hello.outputs.time }}"
-    - name: Display status
-      run: echo "Show the status ${{ steps.hello.outputs.status }}"
+    - uses: actions/checkout@master
+    - name: tester
+      id: tester
+      uses: ./
+      continue-on-error: true
 
+    - name: Create commit comment
+      uses: peter-evans/commit-comment@v1
+      if: steps.tester.outputs.status == 'failure'
+      with:
+        body: |
+          Result:
+          cat test.log
