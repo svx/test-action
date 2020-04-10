@@ -8,5 +8,6 @@ FILE=test.log
 
 if [ -s "$FILE" ]; then
     echo ::set-output name=status::failure
+    echo ::set-output name=status::$(cat test.log)
     exit 1
 fi

@@ -12,7 +12,7 @@ jobs:
 
     - name: Check log
       id: log
-      run: echo ::set-output name=result::$(cat test.loh)
+      run: echo ::set-output name=result::$(cat test.log)
 
 
     - name: Create commit comment
