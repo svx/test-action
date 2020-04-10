@@ -11,6 +11,7 @@ jobs:
       continue-on-error: true
 
     - name: Check log
+      if: steps.test.outputs.status == 'failure'
       id: log
       run: echo ::set-output name=result::$(cat test.log)
 
