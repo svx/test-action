@@ -6,7 +6,8 @@
 #echo "::set-output name=status::Hello Cool"
 FILE=test.log
 
-if [ -s "$FILE" ]; then
+if [ -s "$FILE" ]
+then
     echo ::set-output name=status::failure
     #echo ::set-output name=output::$(cat test.log)
     cat test.log
