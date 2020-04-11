@@ -14,18 +14,27 @@ jobs:
     - name: Check log
       if: steps.test.outputs.status == 'failure'
       id: log
-      run: echo ::set-output name=result::$(cat test.log)
+      run: |
+        echo ::set-output name=result::$(cat test.log)
+        curl --request POST \
+        --url https://api.github.com/repos/${{ github.repository }}/commits \
+        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+        --header 'content-type: application/json' \
+        --data '{
+          "title": "Automated issue for commit: ${{ github.sha }}",
+          "body": "${{ steps.log.outputs.result }}"
+          }'
+        exit 1
 
 
-    - name: Create commit comment
-      uses: peter-evans/commit-comment@v1
-      if: steps.test.outputs.status == 'failure'
-      with:
-        body: |
-          Result:
-           ${{ steps.log.outputs.result }}
+    # - name: Create commit comment
+    #   uses: peter-evans/commit-comment@v1
+    #   if: steps.test.outputs.status == 'failure'
+    #   with:
+    #     body: |
+    #       Result:
+    #        ${{ steps.log.outputs.result }}
 
-    - name: Exit on failure
-      if: steps.test.outputs.status == 'failure'
-      run: exit 1
-
+    #        #    - name: Exit on failure
+    #        #if: steps.test.outputs.status == 'failure'
+    #        #run: exit 1
