@@ -16,14 +16,12 @@ jobs:
       id: log
       run: |
         echo ::set-output name=result::$(cat test.log)
-        curl --request POST \
-        --url https://api.github.com/repos/${{ github.repository }}/commits \
-        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-        --header 'content-type: application/json' \
-        --data '{
-          "title": "Automated issue for commit: ${{ github.sha }}",
-          "body": "${{ steps.log.outputs.result }}"
-          }'
+        jq -nc '{"body": "steps.log.outputs.result"}' | \
+          curl -sL  -X POST -d @- \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments"
+
         exit 1
 
 
