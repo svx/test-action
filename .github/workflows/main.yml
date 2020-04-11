@@ -16,7 +16,7 @@ jobs:
       id: log
       run: |
         echo ::set-output name=result::$(cat test.log)
-        jq -nc '{"body": "${{steps.log.outputs.result}}"}' | \
+        jq -nc '{"body": "Remark Issues Detected - Please Check"}' | \
           curl -sL  -X POST -d @- \
             -H "Content-Type: application/json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
