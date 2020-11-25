@@ -2,6 +2,9 @@
 set -eo pipefail
 
 tw_lines=""  # Lines containing trailing whitespaces.
+FILE=test.log
+OUTPUT="$(cat $FILE)"
+
 
 # TODO (harupy): Check only changed files.
 for file in docs/*.md
@@ -19,8 +22,19 @@ exit_code=0
 # If tw_lines is not empty, change the exit code to 1 to fail the CI.
 if [ ! -z "$tw_lines" ]; then
   echo ::set-output name=status::failure
-  #echo -e "\n***** Lines containing trailing whitespace *****\n"
+  echo -e "\n***** Lines containing trailing whitespace *****\n"
   echo -e "${tw_lines[@]}"
+  echo ::set-output name=output::$(echo -e "${tw_lines[@]}")
+  echo -e "$tw_lines"
+  echo
+  echo $OUTPUT
+  jq -nc '{"body": "$OUTPUT"}' | \
+          curl -sL  -X POST -d @- \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments"
+
+  
   
 
   #echo -e "\n\nFailed!\n"
