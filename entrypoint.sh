@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-# Vars
-ESC_SEQ="\x1b["
-COL_RESET=$ESC_SEQ"39;49;00m"
-COL_RED=$ESC_SEQ"31;01m"
-COL_YELLOW=$ESC_SEQ"33;01m"
-COL_GREEN=$ESC_SEQ"32;01m"
-
 tw_lines=""  # Lines containing trailing whitespaces.
 
 # TODO (harupy): Check only changed files.
@@ -21,17 +14,19 @@ done
 
 exit_code=0
 
+
+
 # If tw_lines is not empty, change the exit code to 1 to fail the CI.
 if [ ! -z "$tw_lines" ]; then
   echo ::set-output name=status::failure
-  echo -en "$COL_YELLOW\n***** Lines containing trailing whitespace *****$COL_RESET\n"
-  echo -e "${tw_lines[@]}"
-  echo -en "$COL_RED\n\nFailed!$COL_RESET\n"
-  jq -nc '{"body": "${tw_lines[@]}"}' |
-          curl -sL  -X POST -d @- 
-            -H "Content-Type: application/json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" 
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments"
+  #echo -e "\n***** Lines containing trailing whitespace *****\n"
+  #echo -e "${tw_lines[@]}"
+  PAYLOAD=$(echo '{}' | jq --arg body "${tw_lines[@]}" '.body = $body')
+  COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
+  echo "Commenting on PR $COMMENTS_URL"
+  curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL"
+
+  #echo -e "\n\nFailed!\n"
   exit_code=1
 fi
 
