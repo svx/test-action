@@ -17,15 +17,15 @@ done
 
 exit_code=0
 
-
+pokemon_name=$"(echo -e "${tw_lines[@]}")"
+echo "$pokemon_name"
 
 # If tw_lines is not empty, change the exit code to 1 to fail the CI.
 if [ ! -z "$tw_lines" ]; then
   echo ::set-output name=status::failure
-  echo ::set-output name=result::$(cat test.log)
+  echo ::set-output name=result::"$pokemon_name"
   echo -e "\n***** Lines containing trailing whitespace *****\n"
   echo -e "${tw_lines[@]}"
-  #echo ::set-output name=result::$(echo -e "${tw_lines[@]}")
   echo -e "\n\nFailed!\n"
   exit_code=1
 fi
