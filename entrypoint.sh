@@ -27,10 +27,10 @@ if [ ! -z "$tw_lines" ]; then
   echo -en "$COL_YELLOW\n***** Lines containing trailing whitespace *****$COL_RESET\n"
   echo -e "${tw_lines[@]}"
   echo -en "$COL_RED\n\nFailed!$COL_RESET\n"
-  jq -nc '{"body": "${tw_lines[@]}"}' | \
-          curl -sL  -X POST -d @- \
+  jq -nc '{"body": "${tw_lines[@]}"}' |
+          curl -sL  -X POST -d @- 
             -H "Content-Type: application/json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" 
             "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments"
   exit_code=1
 fi
