@@ -16,7 +16,8 @@ jobs:
       uses: peter-evans/commit-comment@v1
       if: steps.test.outputs.status == 'failure'
       with:
-         body: |
-           Detected Trailing Spaces:
-           ${{ steps.test.outputs.result }}
-
+        body: |
+          ```
+          ${{ steps.test.outputs.result }}
+          ```
+        reaction-type: 'rocket'
