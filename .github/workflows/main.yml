@@ -21,3 +21,6 @@ jobs:
           ${{ steps.test.outputs.result }}
           ```
         reaction-type: 'rocket'
+
+    - name: Get the output
+      run: echo "The result was ${{ steps.test.outputs.result }}"
