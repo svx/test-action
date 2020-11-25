@@ -15,8 +15,7 @@ jobs:
       if: steps.test.outputs.status == 'failure'
       id: log
       run: |
-        echo ::set-output name=result::$(cat test.log)
-        jq -nc '{"body": "Remark Issues Detected - Please Check"}' | \
+        jq -nc '{"body": "Ups"}' | \
           curl -sL  -X POST -d @- \
             -H "Content-Type: application/json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
