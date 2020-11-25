@@ -25,19 +25,7 @@ if [ ! -z "$tw_lines" ]; then
   echo -e "\n***** Lines containing trailing whitespace *****\n"
   echo -e "${tw_lines[@]}"
   echo ::set-output name=output::$(echo -e "${tw_lines[@]}")
-  echo -e "$tw_lines"
-  echo
-  echo $OUTPUT
-  jq -nc '{"body": "$OUTPUT"}' | \
-          curl -sL  -X POST -d @- \
-            -H "Content-Type: application/json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments"
-
-  
-  
-
-  #echo -e "\n\nFailed!\n"
+  echo -e "\n\nFailed!\n"
   exit_code=1
 fi
 

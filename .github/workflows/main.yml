@@ -11,27 +11,13 @@ jobs:
       uses: ./
       continue-on-error: true
 
-    # - name: Check log
-    #   if: steps.test.outputs.status == 'failure'
-    #   id: log
-    #   run: |
-    #     jq -nc '{"body": "Ups"}' | \
-    #       curl -sL  -X POST -d @- \
-    #         -H "Content-Type: application/json" \
-    #         -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-    #         "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments"
-
-    #     exit 1
+    
+    - name: Create commit comment
+      uses: peter-evans/commit-comment@v1
+      if: steps.test.outputs.status == 'failure'
+      with:
+         body: |
+           Result:
+           ${{ steps.log.outputs.result }}
 
 
-    # - name: Create commit comment
-    #   uses: peter-evans/commit-comment@v1
-    #   if: steps.test.outputs.status == 'failure'
-    #   with:
-    #     body: |
-    #       Result:
-    #        ${{ steps.log.outputs.result }}
-
-    #        #    - name: Exit on failure
-    #        #if: steps.test.outputs.status == 'failure'
-    #        #run: exit 1
