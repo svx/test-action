@@ -20,4 +20,3 @@ jobs:
            Detected Trailing Spaces:
            ${{ steps.test.outputs.result }}
 
-
