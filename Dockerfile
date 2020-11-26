@@ -8,5 +8,5 @@ RUN addgroup -S ocld && adduser -S ocld -G ocld
 WORKDIR /find-trailing-whitespace
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 USER ocld
-ENTRYPOINT [ "bash" ]
-#ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+#ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]

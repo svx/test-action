@@ -26,9 +26,9 @@ exit_code=0
 if [ ! -z "$tw_lines" ]; then
   echo -e "\n***** Lines containing trailing whitespace *****\n"
   echo -e "${tw_lines[@]}"
-  #echo -e "${tw_lines[@]}" >/tmp/log/out 2>&1
-  #echo ::set-output name=result::$"(cat /tmp/log/out)"
-  #echo ::set-output name=status::failure
+  echo -e "${tw_lines[@]}" >/tmp/log/out 2>&1
+  echo ::set-output name=result::$"(cat /tmp/log/out)"
+  echo ::set-output name=status::failure
   #echo -e "\n\nFailed!\n"
   echo -e "show out"
   cat /tmp/log/out
