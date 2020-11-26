@@ -5,8 +5,7 @@ tw_lines=""  # Lines containing trailing whitespaces.
 
 #OUTPUT="$(cat /tmp/log/out)"
 
-# Make the temp directory
-mkdir -p /tmp/log
+
 
 
 # TODO (harupy): Check only changed files.
@@ -26,12 +25,12 @@ exit_code=0
 if [ ! -z "$tw_lines" ]; then
   echo -e "\n***** Lines containing trailing whitespace *****\n"
   echo -e "${tw_lines[@]}"
-  echo -e "${tw_lines[@]}" >/tmp/log/out 2>&1
-  echo ::set-output name=result::$(cat test.log)
+  echo -e "${tw_lines[@]}" >/tmp/ts.log 2>&1
+  echo ::set-output name=result::$(cat /tmp/ts.log)
   echo ::set-output name=status::failure
   #echo -e "\n\nFailed!\n"
   echo -e "show out"
-  cat /tmp/log/out
+  cat /tmp/ts.log
   exit_code=1
 fi
 
