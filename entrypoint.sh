@@ -2,8 +2,9 @@
 set -eo pipefail
 
 tw_lines=""  # Lines containing trailing whitespaces.
-FILE=test.log
-OUTPUT="$(cat $FILE)"
+
+# Make the temp directory
+mkdir -p /tmp/log
 
 
 # TODO (harupy): Check only changed files.
@@ -17,16 +18,17 @@ done
 
 exit_code=0
 
-pokemon_name=$"(echo -e "${tw_lines[@]}")"
-echo "$pokemon_name"
+
 
 # If tw_lines is not empty, change the exit code to 1 to fail the CI.
 if [ ! -z "$tw_lines" ]; then
   echo ::set-output name=status::failure
-  echo ::set-output name=result::"$pokemon_name"
+  echo ::set-output name=result::$(cat /tmp/log/out)
   echo -e "\n***** Lines containing trailing whitespace *****\n"
-  echo -e "${tw_lines[@]}"
-  echo -e "\n\nFailed!\n"
+  echo -e "${tw_lines[@]}" >/tmp/log/out 2>&1
+  #echo -e "\n\nFailed!\n"
+  echo -e "show out"
+  cat /tmp/log/out
   exit_code=1
 fi
 
